@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: products-db
+  labels:
+    app: widgetario
+spec:
+  selector:
+    matchLabels:
+      app: widgetario
+      component: products-db
+  serviceName: products-db # Headless service to manage network identity for pods
+  replicas: 2 # Number of DB replicas for high availability
+  template:
+    metadata:
+      labels:
+        app: widgetario
+        component: products-db
+    spec:      
+      containers:
+        - name: app
+          image: widgetario/products-db-replicated:21.03          
+          envFrom:
+            - secretRef:
+                name: products-db-password # Inject DB credentials securely via secret
+          ports:
+            - containerPort: 5432
+              name: postgres
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data  # Persistent storage for DB data
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+      labels:
+        app: widgetario
+    spec:
+      accessModes: 
+       - ReadWriteOnce
+      resources:
+        requests:
+          storage: 50Mi

@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  labels:
+    app: widgetario
+spec:
+  selector:
+    matchLabels:
+        app: widgetario
+        component: web
+  template:
+    metadata:
+      labels: 
+        app: widgetario
+        component: web
+        hackathon: part-1
+    spec:
+      containers:
+        - name: app
+          image: widgetario/web:21.03
+          ports:
+            - containerPort: 80
+              name: http
+          envFrom:
+            - configMapRef:
+                name: web-features  # Load UI feature flags and settings from ConfigMap
+          volumeMounts:
+            - name: api-config
+              mountPath: "/app/secrets"
+              readOnly: true # Mount API secrets as read-only for security
+      volumes:
+        - name: api-config
+          secret:
+            secretName: web-api # Provides API endpoint URLs securely via Secret

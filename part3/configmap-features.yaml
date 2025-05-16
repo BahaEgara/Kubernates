@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: web-features
+data:
+ # Sets the theme for Widgetario to dark mode
+  Widgetario__Theme: dark 

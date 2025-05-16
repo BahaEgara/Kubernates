@@ -1,0 +1,4 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ingress-nginx # Dedicated namespace for the NGINX ingress controller and related resources
