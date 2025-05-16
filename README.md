@@ -1,4 +1,3 @@
-Here’s a fully reformatted and professional version of your README file for the **Kubernetes CourseLabs Hackathon** submission, improving structure, readability, and visual appeal:
 
 ---
 
@@ -45,6 +44,8 @@ This repository showcases our completed labs, custom configurations, and monitor
 * Created ConfigMaps for externalizing environment variables
 * Mounted ConfigMaps into pods via volumes and environment keys
 
+
+
 ### 🔐 **Lab 5: Secrets**
 
 * Managed sensitive data using Kubernetes Secrets
@@ -87,12 +88,12 @@ This repository showcases our completed labs, custom configurations, and monitor
 
 ## 🧑‍💻 Authors
 
-* **Ryan Mbindyo**
-* **Victor Kahindo**
-* **Antony Kimanthi**
-* **Maximillian Mwenda**
+* **Egara Bahati Jeree**
+* **Dennis Koros**
+* **Shadrack Aroni**
+* **James Magara**
 
-📎 GitHub Profile: [@Mbindyo-Ryan](https://github.com/Mbindyo-Ryan)
+📎 GitHub Profile: [@bahaegara]([https://github.com/Mbindyo-Ryan](https://github.com/BahaEgara/Kubernates.git))
 
 ---
 
@@ -108,5 +109,3 @@ This project is licensed under the [MIT License](LICENSE).
 *Above: Real-time visualization of memory usage by container in bytes.*
 
 ---
-
-Let me know if you'd like a badge header, markdown anchor links, or CI/CD integrations added.
