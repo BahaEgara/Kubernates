@@ -1,0 +1,50 @@
+# API version used for the Deployment resource
+apiVersion: apps/v1
+
+# Declares that this is a Deployment kind
+kind: Deployment
+
+# Metadata about the deployment resource
+metadata:
+  name: products-api  # Name of the Deployment
+  labels:             # Labels are key-value pairs used to organize and select resources
+    app: widgetario
+    kubernetes.courselabs.co: hackathon  # Custom label used by the hackathon platform
+
+spec:
+  selector:           # Specifies how the Deployment finds which Pods to manage
+    matchLabels:
+      app: widgetario
+      component: products-api  # Must match the labels under template.metadata.labels
+
+  template:
+    metadata:
+      labels:
+        app: widgetario
+        component: products-api  # Helps with grouping and selecting the correct Pods
+        hackathon: part-1        # Indicates which part of the hackathon this config relates to
+
+    spec:
+      containers:
+        - name: app                      # Name of the container
+          image: widgetario/products-api:21.03  # Docker image to run for the application
+          
+          ports:
+            - containerPort: 80          # Port the container listens on internally
+              name: http                 # Named port for reference in services, probes, etc.
+
+          volumeMounts:
+            - name: db-properties        # Refers to a volume defined below
+              mountPath: "/app/config"   # Mounts the volume inside the container at this path
+              readOnly: true             # Prevents the container from modifying the secret
+
+      volumes:
+        - name: db-properties            # Defines a volume to be mounted
+          secret:
+            secretName: products-api-db  # Name of the Kubernetes Secret to use as the source
+
+            # This secret should contain database configuration values like:
+            # - a username
+            # - a password
+            # - database URL or connection strings
+

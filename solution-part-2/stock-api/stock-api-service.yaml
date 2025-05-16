@@ -1,0 +1,20 @@
+apiVersion: v1  # API version for Kubernetes core resources
+kind: Service   # Declares a Service to expose the stock-api Pods
+
+metadata:
+  name: stock-api  # Internal DNS name for the service (e.g., http://stock-api)
+  labels:
+    kubernetes.courselabs.co: hackathon  # Label for hackathon grouping
+    app: widgetario                      # App label for organization
+
+spec:
+  ports:
+    - port: 80               # Port that the service exposes inside the cluster
+      targetPort: http       # Maps to the named container port in the stock-api Deployment
+
+  selector:
+    app: widgetario
+    component: stock-api     # Selects matching Pods to forward traffic to
+
+  type: ClusterIP            # Internal-only access; other services in the cluster can reach it
+

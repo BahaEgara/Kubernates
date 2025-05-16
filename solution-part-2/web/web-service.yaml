@@ -1,0 +1,40 @@
+# This Service uses a LoadBalancer to expose the web front-end externally.
+# In a cloud environment (like GKE, EKS, AKS), this would provision an external IP.
+apiVersion: v1
+kind: Service
+metadata:
+  name: widgetario-web-lb  # Service name used by other components if needed
+  labels:
+    kubernetes.courselabs.co: hackathon
+    app: widgetario
+
+spec:
+  ports:
+    - port: 8080             # External port the LoadBalancer will listen on
+      targetPort: http       # Maps to the named container port in the web app container
+  selector:  
+    app: widgetario
+    component: web           # Ensures this service targets the web app Pods
+  type: LoadBalancer         # Chosen to allow external access in cloud-based setups
+
+---
+# This is an alternative Service of type NodePort for local cluster access (e.g., Minikube or kubeadm).
+# I included this to ensure the application is accessible even without cloud provider support.
+apiVersion: v1
+kind: Service
+metadata:
+  name: widgetario-web-np  # NodePort service for local testing or environments without a LoadBalancer
+  labels:
+    kubernetes.courselabs.co: hackathon
+    app: widgetario
+
+spec:
+  ports:
+    - port: 8080            # Internal cluster port
+      targetPort: http      # Matches the container's exposed HTTP port
+      nodePort: 30008       # External port exposed on each Node's IP (accessible via <NodeIP>:30008)
+  selector:
+    app: widgetario
+    component: web
+  type: NodePort            # Enables manual exposure through the node’s IP address
+

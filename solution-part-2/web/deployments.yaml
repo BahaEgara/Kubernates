@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment  # Creates a Deployment to manage the web app Pods
+
+metadata:
+  name: web  # Name of the deployment
+  labels:
+    kubernetes.courselabs.co: hackathon  # Label for hackathon identification
+    app: widgetario                      # Common app label across all related resources
+
+spec:
+  selector:
+    matchLabels:
+      app: widgetario
+      component: web  # Ensures this deployment manages Pods with matching labels
+
+  template:
+    metadata:
+      labels: 
+        app: widgetario
+        component: web
+        hackathon: part-1  # Indicates this is related to Part 1 of the hackathon
+
+    spec:
+      containers:
+        - name: app
+          image: widgetario/web:21.03  # Container image for the frontend application
+
+          ports:
+            - containerPort: 80  # Exposes HTTP traffic on port 80 inside the container
+              name: http         # Named port used in Services
+
+          envFrom:
+            - configMapRef:
+                name: web-features  # Loads environment variables from a ConfigMap (for feature flags, etc.)
+
+          volumeMounts:
+            - name: api-config           # Mounts the secret containing the API URLs
+              mountPath: "/app/secrets"  # Application will read api.json from this path
+              readOnly: true             # Ensures the secret is not modified by the container
+
+      volumes:
+        - name: api-config
+          secret:
+            secretName: web-api  # Refers to the Secret that contains api.json
+

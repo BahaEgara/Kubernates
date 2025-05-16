@@ -1,0 +1,35 @@
+apiVersion: apps/v1  # API version for the Deployment resource
+kind: Deployment     # Defines this as a Deployment (for managing Pods)
+
+metadata:
+  name: products-db  # Name of the Deployment
+  labels:
+    kubernetes.courselabs.co: hackathon  # Label for hackathon organization
+    app: widgetario                      # App label for grouping and service selection
+
+spec:
+  selector:
+    matchLabels:
+      app: widgetario
+      component: products-db  # Matches Pods with these labels
+
+  template:
+    metadata:
+      labels: 
+        app: widgetario
+        component: products-db
+        hackathon: part-1      # Indicates association with Part 1 of the hackathon
+
+    spec:
+      containers:
+        - name: app
+          image: widgetario/products-db:21.03  # Postgres DB container image
+          
+          ports:
+            - containerPort: 5432   # Default port for PostgreSQL
+              name: postgres        # Named for reference (e.g., in services)
+
+          envFrom:
+            - secretRef:
+                name: products-db-password  # Loads environment variables from this secret
+
